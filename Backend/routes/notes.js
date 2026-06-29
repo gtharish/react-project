@@ -40,10 +40,10 @@ router.put("/updateNotes/:id",fetchUser,async (req,res)=>{
     const UserId = req.user.id;
     const notes = await Notes.findById(Id);
     if(!notes){
-        res.status(404).send("notes are not available");
+         return res.status(404).send("notes are not available");
     }
     if(notes.user.toString() != UserId){
-        res.status(401).send("can't access");
+        return res.status(401).send("can't access");
     }
     
     const note = {
@@ -56,6 +56,21 @@ router.put("/updateNotes/:id",fetchUser,async (req,res)=>{
           {new:true});
     res.json(data);
 });
+
+router.delete("/deleteNotes/:id",fetchUser,async(req,res)=>{
+  let Id = req.params.id;
+  let note = await Notes.findById(Id);
+  let UserId = req.user.id;
+  if(!note){
+    return res.status(404).send("Not found");
+  }
+  if(note.user.toString() != UserId){
+    return res.status(401).send("cant't accesss !!!");
+
+  }
+ await Notes.findByIdAndDelete(Id);
+  res.json("data is deleted successfully");
+})
 export default router;
 
 
