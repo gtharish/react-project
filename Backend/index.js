@@ -3,7 +3,10 @@ import ConnectTo from "./db.js";
 import authRoute from "./routes/auth.js";
 import notesRoute from "./routes/notes.js";
 import User from "./models/user.js";
+import cors from "cors";
+
 const app = express();
+app.use(cors("http://localhost:5173/"));
 app.use(express.json());
 
 async function start(){

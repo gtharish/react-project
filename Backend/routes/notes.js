@@ -5,12 +5,13 @@ import Notes from "../models/notes.js";
 import fetchUser from "../middleware/fetchUser.js";
 import { body, validationResult } from "express-validator";
 
+
 router.get("/fetchNotes",fetchUser,async(req,res)=>{
-    const UserId = req.body.user.id;
-    const notes = await Notes.find({userId:UserId});
-    res.send(notes);
+    const UserId = req.user.id;
+    const notes = await Notes.find({user:UserId});
+    console.log("userid is ",UserId);  res.send(notes);
 })
-router.get("/createNotes",fetchUser,
+router.post("/addNotes",fetchUser,
     [
         body("title", "title must be 3 character").isLength({ min: 3 }),
     
@@ -57,20 +58,28 @@ router.put("/updateNotes/:id",fetchUser,async (req,res)=>{
     res.json(data);
 });
 
-router.delete("/deleteNotes/:id",fetchUser,async(req,res)=>{
-  let Id = req.params.id;
-  let note = await Notes.findById(Id);
-  let UserId = req.user.id;
-  if(!note){
-    return res.status(404).send("Not found");
-  }
-  if(note.user.toString() != UserId){
-    return res.status(401).send("cant't accesss !!!");
+router.delete("/deleteNotes/:id", fetchUser, async (req, res) => {
+    try {
+        const id = req.params.id;
 
-  }
- await Notes.findByIdAndDelete(Id);
-  res.json("data is deleted successfully");
-})
+        const note = await Notes.findById(id);
+
+        if (!note) {
+            return res.status(404).send("Note not found");
+        }
+
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send("You can't access this note");
+        }
+
+        await Notes.findByIdAndDelete(id);
+
+        res.json({ success: true, message: "Note deleted successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 export default router;
 
 
