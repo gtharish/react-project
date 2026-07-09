@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import NotesContext from './NotesContext';
-import { API_URL } from '../config';
+
 export default function NoteState(props) {
 
 
-  const host = API_URL;
+  const host =import.meta.env.VITE_API_URL;
   const [notes, setNote] = useState([]);
   const [isLogedIn,setisLogedIn] = useState(!!localStorage.getItem("token"));
 

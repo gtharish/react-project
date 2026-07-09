@@ -8,7 +8,7 @@ export default function Signup() {
     const context = useContext(NotesContext);
    const {setisLogedIn} = context;
     const navigate = useNavigate();
-    const host = "http://localhost:8000/api/auth";
+  const host =import.meta.env.VITE_API_URL;
 const [credential,setCredential] = useState({
     name:"",
     email:"",
