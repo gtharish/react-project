@@ -124,7 +124,7 @@ export default function Notes() {
     {notes.length == 0 ?(
       <p>No notes available</p>
     ):
-   <div className="row g-4 my-4">
+   (<div className="row g-4 my-4">
   {notes.map((note, index) => (
     <div className="col-lg-4 col-md-6" key={index}>
       <div className="card note-card h-100 shadow-sm border-0">
@@ -139,7 +139,7 @@ export default function Notes() {
             {note.description}
           </p>
 
-          <div className="d-flex justify-content-end gap-3 mt-3">
+          <div className="d-flex justify-content-between gap-3 mt-3 mx-3">
             <i
               className="fa-solid fa-trash text-danger action-icon"
               onClick={() => deleteNotes(note._id)}
@@ -154,7 +154,7 @@ export default function Notes() {
       </div>
     </div>
   ))}
-</div>
+</div>)
     }
       
     </div>

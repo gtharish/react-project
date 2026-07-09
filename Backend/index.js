@@ -4,7 +4,9 @@ import authRoute from "./routes/auth.js";
 import notesRoute from "./routes/notes.js";
 import User from "./models/user.js";
 import cors from "cors";
+require("dotenv").config();
 
+const Port = process.env.PORT||8000;
 const app = express();
 app.use(cors("http://localhost:5173/"));
 app.use(express.json());
@@ -13,7 +15,7 @@ async function start(){
    await ConnectTo();
 
 
-app.listen("8000",()=>{
+app.listen(Port,()=>{
     console.log("i am listening ");
 })
 }

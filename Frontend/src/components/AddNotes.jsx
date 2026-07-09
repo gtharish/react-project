@@ -17,7 +17,7 @@ export default function AddNotes() {
 
   const handleSubmit = (e) =>{
     e.preventDefault();
-    addNotes(note.tag,note.description,note.title);
+    addNotes(note.tag,note.title,note.description);
     setNote({
        "tag":"",
     "title":"",

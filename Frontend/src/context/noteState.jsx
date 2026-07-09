@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import NotesContext from './NotesContext';
+import { API_URL } from '../config';
 export default function NoteState(props) {
 
 
-  const host = "http://localhost:8000/api/auth";
+  const host = API_URL;
   const [notes, setNote] = useState([]);
   const [isLogedIn,setisLogedIn] = useState(!!localStorage.getItem("token"));
 
@@ -37,9 +38,9 @@ export default function NoteState(props) {
         "authToken": localStorage.getItem("token")
       },
       body: JSON.stringify({
+        tag,
         title,
-        description,
-        tag
+        description
       })
     });
     const data = await response.json();

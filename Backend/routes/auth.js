@@ -4,11 +4,12 @@ import User from "../models/user.js";
 import fetchUser from "../middleware/fetchUser.js";
 import { body, validationResult } from "express-validator";
 import JWT from "jsonwebtoken";
+require("dotenv").config();
 
 import bcrypt from "bcrypt"
 
 
-const JWT_SECRET = "this is mr.stark";
+const JWT_SECRET = process.env.JWT_SECRET;
 router.post("/signup", [
     body("name", "name must be 3 character").isLength({ min: 3 }),
     body("email", "enter a valid email").isEmail(),
