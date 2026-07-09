@@ -1,85 +1,107 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import NotesContext from './NotesContext';
 export default function NoteState(props) {
 
-  
+
   const host = "http://localhost:8000/api/auth";
   const [notes, setNote] = useState([]);
+  const [isLogedIn,setisLogedIn] = useState(!!localStorage.getItem("token"));
 
   const fetchNotes = async () => {
-    const response = await fetch(`${host}/fetchNotes`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNmEzY2Y1MzhjNjU5NWI5MzcxMTY1YzY5In0sImlhdCI6MTc4MjQ3MTA5MX0.zhqX0UDpQqDmNzKnmYpON3Ugje-Fs1tlXxuOdUDpI4c"
-      },
-    });
 
-    const data = await response.json();
-    setNote(data);
-  
+    
+      const response = await fetch(`${host}/fetchNotes`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "authToken": localStorage.getItem("token"),
+        },
+      });
 
+      const data = await response.json();
+      setNote(data);
   };
-   useEffect(()=>{
+ useEffect(() => {
+  console.log("Calling fetchNotes...");
+  if (isLogedIn) {
     fetchNotes();
-   },[]);
-  
-   
-const addNotes = async (tag, title, description) => {
-       const response = await fetch(`${host}/addNotes`, {
+  }
+}, [isLogedIn]);
+
+
+  const addNotes = async (tag, title, description) => {
+    const response = await fetch(`${host}/addNotes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNmEzY2Y1MzhjNjU5NWI5MzcxMTY1YzY5In0sImlhdCI6MTc4MjQ3MTA5MX0.zhqX0UDpQqDmNzKnmYpON3Ugje-Fs1tlXxuOdUDpI4c"
+        "authToken": localStorage.getItem("token")
       },
-       body: JSON.stringify({
-            title,
-            description,
-            tag
-        })
+      body: JSON.stringify({
+        title,
+        description,
+        tag
+      })
     });
-    const data =await response.json();
+    const data = await response.json();
     setNote(notes.concat(data));
-    
-    console.log("updated data is",data);
-  
-};
 
-const deleteNotes = async (id) => {
-  const response = await fetch(`${host}/deleteNotes/${id}`, {
+
+
+  };
+
+  const deleteNotes = async (id) => {
+    const response = await fetch(`${host}/deleteNotes/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNmEzY2Y1MzhjNjU5NWI5MzcxMTY1YzY5In0sImlhdCI6MTc4MjQ3MTA5MX0.zhqX0UDpQqDmNzKnmYpON3Ugje-Fs1tlXxuOdUDpI4c"
+        "authToken": localStorage.getItem("token")
       },
     });
-    
+
     const responseData = await response.json();
     console.log(responseData);
 
-  const data = notes.filter((note) => {
-    return note._id != id;
-  })
-  setNote(data);
-};
+    const data = notes.filter((note) => {
+      return note._id != id;
+    })
+    setNote(data);
+  };
 
-const editNotes = (id, title, tag, description) => {
-  const updatedNotes = notes.map((note) => {
-    if (note._id.$oid == id) {
-      return {
-        ...note, tag, title, description
-      };
-    }
-  });
+  const editNotes = async (id, edNote) => {
+    const { tag, title, description } = edNote;
+    console.log("this is updated data", tag, title, description);
+    const updatedNotes = notes.map((note) => {
+      if (note._id == id) {
+        return {
+          ...note, tag, title, description
+        };
+      }
+      return note;
+    });
 
-  setNote(updatedNotes);
-}
+    const response = await fetch(`${host}/editNotes/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "authToken": localStorage.getItem("token")
+      },
+      body: JSON.stringify({
+        tag, title, description
+      })
 
-return (
-  <div>
-    <NotesContext.Provider value={{ notes, addNotes, deleteNotes, editNotes }}>
-      {props.children}
-    </NotesContext.Provider>
-  </div>
-)
+    });
+    const res = response.json();
+    console.log(res);
+
+
+    setNote(updatedNotes);
+  }
+
+  return (
+    <div>
+      <NotesContext.Provider value={{ notes, addNotes, deleteNotes, editNotes ,isLogedIn,setisLogedIn}}>
+        {props.children}
+      </NotesContext.Provider>
+    </div>
+  )
 };

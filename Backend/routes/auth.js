@@ -9,10 +9,10 @@ import bcrypt from "bcrypt"
 
 
 const JWT_SECRET = "this is mr.stark";
-router.post("/createUser", [
+router.post("/signup", [
     body("name", "name must be 3 character").isLength({ min: 3 }),
     body("email", "enter a valid email").isEmail(),
-    body("password", "password must be 3 character").isLength({ min: 5 })
+    body("password", "password must be 5 character").isLength({ min: 5 })
 
   ], async (req, res) => {
     const errors = validationResult(req);
@@ -24,10 +24,11 @@ router.post("/createUser", [
         });
     }
     const saltRounds = 10;
+    let success = false;
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
     let user = await User.findOne({ email: req.body.email });
     if (user) {
-        res.status(400).json({ error: "this email is already there" });
+         return res.status(400).json({ error: "this email is already there" });
     }
     else {
         const user = await User.create({
@@ -42,8 +43,8 @@ router.post("/createUser", [
             }
         }
         const authToken = JWT.sign(data, JWT_SECRET);
-
-        res.json({ authToken });
+        success = true;
+         return res.json({success, authToken });
     };
 }
 )
@@ -60,6 +61,7 @@ router.post("/login", [
             errors: errors.array(),
         });
      }
+     let success = false;
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
@@ -78,7 +80,8 @@ router.post("/login", [
                 }
             }
             const authToken = JWT.sign(data, JWT_SECRET);
-            res.json({authToken});
+            success = true;
+            res.json({success,authToken});
         }
     };
 })

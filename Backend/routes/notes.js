@@ -9,7 +9,8 @@ import { body, validationResult } from "express-validator";
 router.get("/fetchNotes",fetchUser,async(req,res)=>{
     const UserId = req.user.id;
     const notes = await Notes.find({user:UserId});
-    console.log("userid is ",UserId);  res.send(notes);
+   
+     res.send(notes);
 })
 router.post("/addNotes",fetchUser,
     [
@@ -35,7 +36,7 @@ router.post("/addNotes",fetchUser,
     res.json(data);
 });
 
-router.put("/updateNotes/:id",fetchUser,async (req,res)=>{
+router.put("/editNotes/:id",fetchUser,async (req,res)=>{
     const Id = req.params.id;
     const {title,description,tag} = req.body;
     const UserId = req.user.id;

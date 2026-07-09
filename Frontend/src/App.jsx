@@ -1,17 +1,24 @@
 import React from 'react'
 import './App.css'
-import {Router,Route} from "react-router-dom";
+import {BrowserRouter,Routes,Route} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./components/home";
+import Login from './components/Login';
+import Signup from './components/Signup';
 
 function App() {
   return (
    <>
-    <Navbar/>
-    <Home/>
-    {/* <Router>
-    
-   </Router> */}
+   <BrowserRouter>
+       <Navbar/>
+    <div className='container mt-4'>
+       <Routes>
+      <Route path="/" element = { <Home/>}></Route>
+      <Route path="/login" element = {<Login/>}></Route>
+      <Route path="/signup" element = {<Signup/>}></Route>
+   </Routes>
+    </div>
+   </BrowserRouter>
    </>
   )
 }

@@ -27,7 +27,7 @@ export default function AddNotes() {
   return (
     <div>
       <div className="container my-4">
-        <h2 className="mb-4">Add a Note</h2>
+        <h2 className=" text-center mb-4">Add a Note</h2>
 
         <form>
           <div className="mb-3">
