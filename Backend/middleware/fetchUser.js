@@ -1,6 +1,8 @@
 import JWT from "jsonwebtoken";
 // import user from "../models/user";
-const JWT_SECRET = "this is mr.stark";
+import "dotenv/config";
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const fetchUser = async(req,res,next)=>{
     const token = req.header("authToken");

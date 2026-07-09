@@ -4,7 +4,7 @@ import User from "../models/user.js";
 import fetchUser from "../middleware/fetchUser.js";
 import { body, validationResult } from "express-validator";
 import JWT from "jsonwebtoken";
-require("dotenv").config();
+import "dotenv/config";
 
 import bcrypt from "bcrypt"
 
