@@ -9,6 +9,7 @@ export default function Login() {
     const { setisLogedIn } = context;
     const navigate = useNavigate();
     const host = import.meta.env.VITE_API_URL;
+      console.log(host);
     const [credential, setCredential] = useState({
         email: "",
         password: "",
