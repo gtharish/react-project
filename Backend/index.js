@@ -6,7 +6,7 @@ import ConnectTo from "./db.js";
 import authRoute from "./routes/auth.js";
 import notesRoute from "./routes/notes.js";
 
-dotenv.config();
+const result = dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -34,6 +34,8 @@ const start = async () => {
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      console.log(process.env.MONGO_URL);
+      console.log(result);
     });
   } catch (error) {
     console.error("Database connection failed:", error);
