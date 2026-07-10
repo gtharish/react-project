@@ -7,13 +7,13 @@ import App from './App.jsx'
 import NoteState from './context/noteState.jsx';
 
 
-import { Analytics } from "@vercel/analytics/react"
+// import { Analytics } from "@vercel/analytics/react"
 
 createRoot(document.getElementById('root')).render(
  
     <NoteState>
     <App />
-    <Analytics/>
+    {/* <Analytics/> */}
     </NoteState>
 
 )
